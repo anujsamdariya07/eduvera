@@ -3,11 +3,12 @@
 import { Button } from '@nextui-org/react'
 import dynamic from "next/dynamic";
 import "react-quill-new/dist/quill.snow.css";
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import toast from 'react-hot-toast';
-import { createNewCourses } from '@/lib/courses/write';
+import { createNewCourse, createNewCourses, updateCourse } from '@/lib/courses/write';
 import { useAuth } from '@/context/AuthContext';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
+import { getCourse } from '@/lib/courses/read_server';
 
 const ReactQuill = dynamic(() => import("react-quill-new"), { ssr: false });
 
@@ -79,6 +80,28 @@ const Form = () => {
 
   const router = useRouter()
   
+  const searchParams = useSearchParams()
+  const id = searchParams.get('id')
+  
+  const fetchData = async () => {
+    try {
+      const course = await getCourse({id: id})
+      if (course) {
+        setData(course)
+      } else {
+        throw new Error(`Course with id: ${id} does not exists!`)
+      }
+    } catch (error) {
+      toast.error(error?.message)
+    }
+  }
+
+  useEffect(() => {
+    if (id) {
+      fetchData()
+    }
+  }, [id])
+  
   const { user } = useAuth()
 
   const handleImage = (e) => {
@@ -96,13 +119,13 @@ const Form = () => {
     })
   }
 
-  const handleSubmit = async () => {
+  const handleCreate = async () => {
     console.log('Clicked!')
     
     setIsLoading(true)
     try {
       // TODO: Set data to firestore
-      await createNewCourses({
+      await createNewCourse({
         data: data,
         image: image,
         instructorName: user?.displayName,
@@ -118,16 +141,45 @@ const Form = () => {
     }
     setIsLoading(false)
   }
+
+  const handleUpdate = async () => {
+    console.log('Clicked!')
+    
+    setIsLoading(true)
+    try {
+      // TODO: Set data to firestore
+      await updateCourse({
+        data: data,
+        image: image,
+        instructorName: user?.displayName,
+        instructorEmail: user?.email,
+        instructorId: user?.uid,
+        instructorPhotoURL: user?.photoURL,
+      })
+      toast.success('Course has been updated successfully!')
+
+      router.push(`/my-courses`)
+    } catch (error) {
+      toast.error(error?.message)
+    }
+    setIsLoading(false)
+  }
   
   return (
     <form onSubmit={(e) => {
       e.preventDefault()
-      handleSubmit()
+      if (id) {
+        handleUpdate()
+      } else {
+        handleCreate()
+      }
     }} className='p-8 flex flex-col gap-3 bg-gray-50 min-h-screen w-full'>
       <div className='flex justify-between items-center'>
-        <h1 className='text-2xl'>Create New Courses</h1>
+        <h1 className='text-2xl'>
+          {id? 'Update Course':'Create New Courses'}
+        </h1>
         <Button type='submit' isLoading={isLoading} isDisabled={isLoading}>
-          Create
+          {id? 'Update': 'Create'}
         </Button>
       </div>
       <div className='flex flex-col gap-4 border bg-white p-5 rounded-lg'>
@@ -140,7 +192,13 @@ const Form = () => {
           required
         />
         <div className='w-full border-2 border-dashed rounded-lg p-6'>
-          <input type="file" onChange={handleImage} name="" id="" required />
+          <input 
+            type="file" 
+            onChange={handleImage} 
+            name="" 
+            id="" 
+            required={!id}
+          />
         </div>
         <div className='flex flex-col gap-1'>
           <label 

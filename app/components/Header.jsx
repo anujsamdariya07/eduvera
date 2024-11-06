@@ -8,11 +8,13 @@ const Header = () => {
   return (
     <div>
       <div className='border-b px-8 py-3 flex justify-between'>
-        <img
-          src="/logo.png"
-          alt=""
-          className='h-10'
-        />
+        <Link href={'/'}>
+          <img
+            src="/logo.png"
+            alt=""
+            className='h-10'
+          />
+        </Link>
         <div className='flex gap-3 items-center'>
           <Link 
             href={'/subscription'}

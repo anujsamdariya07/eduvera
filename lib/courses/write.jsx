@@ -1,8 +1,8 @@
-import { doc, collection, setDoc, Timestamp } from "firebase/firestore";
+import { doc, collection, setDoc, Timestamp, updateDoc, deleteDoc } from "firebase/firestore";
 import { db, storage } from "../firebase";
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 
-export const createNewCourses = async ({
+export const createNewCourse = async ({
   data,
   image,
   instructorId,
@@ -48,3 +48,54 @@ export const createNewCourses = async ({
     throw new Error('Failed to create new course');
   }
 };
+
+export const updateCourse = async ({
+  data,
+  image,
+  instructorId,
+  instructorName,
+  instructorPhotoURL,
+  instructorEmail,
+}) => {
+  if (!data?.id) {
+    throw new Error('ID is required!');
+  }
+  if (!data?.title) {
+    throw new Error('Title is required!');
+  }
+  if (!instructorId) {
+    throw new Error('Instructor Id is required!');
+  }
+
+  let imageURL = data?.imageURL
+
+  try {
+    if (image) {
+      // Reference of the image with a unique name
+      const imageRef = ref(storage, `courses/${newId}_${image.name}`);
+  
+      // Uploading image
+      await uploadBytes(imageRef, image);
+  
+      imageURL = await getDownloadURL(imageRef);
+    }
+
+    // Uploading the course details
+    await updateDoc(doc(db, `courses/${data?.id}`), {
+      ...data,
+      imageURL: imageURL,
+      instructorId: instructorId,
+      instructorName: instructorName,
+      instructorPhotoURL: instructorPhotoURL,
+      instructorEmail: instructorEmail,
+      timestampUpdate: Timestamp.now(),
+    });
+  } catch (error) {
+    console.error('Error creating new course:', error);
+    throw new Error('Failed to create new course');
+  }
+};
+
+export const deleteCourse = async ({ id }) => {
+  await deleteDoc(doc(db, `courses/${id}`))
+}
