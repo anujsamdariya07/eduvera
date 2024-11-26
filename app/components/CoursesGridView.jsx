@@ -1,7 +1,5 @@
 import React from 'react'
 import { getAllCourses } from '../../lib/courses/read_server'
-import { Button } from '@nextui-org/react'
-import { ShoppingBag } from 'lucide-react'
 import Link from 'next/link'
 import CourseButton from './CourseButton'
 import AuthContextProvider from 'context/AuthContext'
@@ -34,16 +32,6 @@ const CourseCard = ({ course }) => {
           className='h-40 text-center rounded-t-lg object-cover object-top w-full'
           alt=""
         />
-        {/* <img 
-          src={course?.imageURL}
-          className='h-40 w-full rounded-t-lg object-contain bg-gray-100'
-          alt={course?.title || "Course Image"}
-        /> */}
-        {/* <img 
-          src={course?.imageURL} 
-          className='h-40 w-full rounded-t-lg object-cover' 
-          alt={course?.title || "Course Image"} 
-        /> */}
       </Link>
       <div className='flex flex-col gap-1 p-3 md:p-4'>
         <Link href={`/courses/${course?.id}`}>

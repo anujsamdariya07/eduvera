@@ -5,7 +5,7 @@ import { useAuth } from 'context/AuthContext'
 import { Edit2, Play, ShoppingBag } from 'lucide-react'
 import Link from 'next/link'
 import React from 'react'
-import { useSubscriptions, useSubscription } from '../../lib/subscriptions/read'
+import { useSubscription } from '../../lib/subscriptions/read'
 
 const CourseButton = ({courseId, instructorId}) => {
   const { user } = useAuth()
