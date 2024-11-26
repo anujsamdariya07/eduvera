@@ -5,10 +5,13 @@ import dynamic from "next/dynamic";
 import "react-quill-new/dist/quill.snow.css";
 import React, { useEffect, useState } from 'react'
 import toast from 'react-hot-toast';
-import { createNewCourse, createNewCourses, updateCourse } from '@/lib/courses/write';
-import { useAuth } from '@/context/AuthContext';
+// import { createNewCourse, createNewCourses, updateCourse } from '@/lib/courses/write';
+import { createNewCourse, createNewCourses, updateCourse } from '../../../../lib/courses/write';
+// import { useAuth } from '@/context/AuthContext';
+import { useAuth } from '../../../../context/AuthContext';
 import { useRouter, useSearchParams } from 'next/navigation';
-import { getCourse } from '@/lib/courses/read_server';
+// import { getCourse } from '@/lib/courses/read_server';
+import { getCourse } from '../../../../lib/courses/read_server';
 
 const ReactQuill = dynamic(() => import("react-quill-new"), { ssr: false });
 

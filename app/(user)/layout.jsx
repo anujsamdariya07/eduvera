@@ -1,8 +1,9 @@
 'use client'
 
-import AuthContextProvider, { useAuth } from '@/context/AuthContext'
+// import AuthContextProvider, { useAuth } from '@/context/AuthContext'
 import { Button, CircularProgress } from '@nextui-org/react'
 import React from 'react'
+import AuthContextProvider, { useAuth } from '../../context/AuthContext'
 
 const Layout = ({ children }) => {
   return (

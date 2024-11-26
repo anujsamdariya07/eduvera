@@ -1,13 +1,14 @@
 'use client'
 
-import { useAuth } from '@/context/AuthContext'
-import { useCourses } from '@/lib/courses/read'
-import { deleteCourse } from '@/lib/courses/write'
+// import { useAuth } from '@/context/AuthContext'
+import { useCourses } from '../../../../lib/courses/read'
+import { deleteCourse } from '../../../../lib/courses/write'
 import { Button, CircularProgress } from '@nextui-org/react'
 import { Edit2, Play, Trash2 } from 'lucide-react'
 import { useRouter } from 'next/navigation'
 import React, { useState } from 'react'
 import toast from 'react-hot-toast'
+import { useAuth } from '../../../../context/AuthContext'
 
 const ListView = () => {
   const {user} = useAuth()
@@ -64,14 +65,19 @@ const CourseCard = (item, key) => {
         alt="" 
       />
       <div className='p-3'>
-      <h1 className='font-semibold'>
+      <h1 className='font-semibold line-clamp-2'>
         {item?.title}
       </h1>
       <h1 className='text-gray-600 text-sm'>
-        5 Students Enrolled
+        {item?.totalStudents} {item?.totalStudents === 1? 'Student': 'Students'} Enrolled
       </h1>
       <div className='flex gap-4 w-full mt-2'>
-        <Button className='w-full flex gap-1'>
+        <Button 
+          onClick={() => {
+            router.push(`/my-courses/${item?.id}`)
+          }}
+          className='w-full flex gap-1'
+        >
           <Play size={13} />
           View
         </Button>

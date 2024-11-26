@@ -2,6 +2,14 @@ import { doc, collection, setDoc, Timestamp, updateDoc, deleteDoc } from "fireba
 import { db, storage } from "../firebase";
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 
+const convertTimestampToPlainObject = (timestamp) => {
+  return {
+    seconds: timestamp.seconds,
+    nanoseconds: timestamp.nanoseconds,
+  };
+};
+
+
 export const createNewCourse = async ({
   data,
   image,
@@ -41,7 +49,7 @@ export const createNewCourse = async ({
       instructorName: instructorName,
       instructorPhotoURL: instructorPhotoURL,
       instructorEmail: instructorEmail,
-      timestampCreate: Timestamp.now(),
+      timestampCreate: convertTimestampToPlainObject(Timestamp.now()),
     });
   } catch (error) {
     console.error('Error creating new course:', error);

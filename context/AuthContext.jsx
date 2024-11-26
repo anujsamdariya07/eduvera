@@ -1,6 +1,6 @@
 'use client'
 
-import { auth } from "@/lib/firebase"
+import { auth } from "../lib/firebase"
 import { GoogleAuthProvider, onAuthStateChanged, signInWithPopup, signOut } from "firebase/auth"
 import toast from "react-hot-toast"
 

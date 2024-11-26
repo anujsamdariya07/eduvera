@@ -1,17 +1,17 @@
 'use client'
 
-import { collection, doc, onSnapshot, query, where } from 'firebase/firestore'
+import { collection, doc, onSnapshot, orderBy, query, where } from 'firebase/firestore'
 import { SSG_GET_INITIAL_PROPS_CONFLICT } from 'next/dist/lib/constants'
 import useSWRSubscription from 'swr/subscription'
 import { db } from '../firebase'
 
-export const useCourses = ({ uid }) => {
+export const useSubscriptions = ({ uid }) => {
   const { data, error } = useSWRSubscription(
-    ['courses', uid],
+    ['subscriptions', uid],
     ([path, uid], { next }) => {
       const collectionRef = query(
-        collection(db, `courses`),
-        where('instructorId', '==', uid)
+        collection(db, `users/${uid}/subscriptions`),
+        orderBy('timestamp', 'desc')
       )
       const unsub = onSnapshot(
         collectionRef, (snapshot) => {
@@ -27,13 +27,13 @@ export const useCourses = ({ uid }) => {
   return { data, error, isLoading: data === undefined }
 }
 
-export const useCourse = ({ id }) => {
+export const useSubscription = ({ uid, id }) => {
   const { data, error } = useSWRSubscription(
-    ['courses', id],
-    ([path, id], { next }) => {
-      const docRef = doc(db, `courses/${id}`)
+    ['subscription', uid, id],
+    ([path, uid, id], { next }) => {
+      const docRef = doc(db, `users/${uid}/subscriptions/${id}`)
       const unsub = onSnapshot(
-        docRef, 
+        docRef,
         (snapshot) => {
           next(
             null,

@@ -1,8 +1,9 @@
 'use client'
 
-import { useAuth } from '@/context/authContext'
 import { Dropdown, DropdownTrigger, DropdownMenu, DropdownItem, Button, Avatar } from "@nextui-org/react";
 import React from 'react'
+import { useAuth } from "../../context/AuthContext";
+import { useRouter } from "next/navigation";
 
 const UserLogin = () => {
   const {
@@ -11,6 +12,8 @@ const UserLogin = () => {
     handleLogout,
     isLoading
   } = useAuth()
+
+  const router = useRouter()
 
   if (user) {
     return (
@@ -28,6 +31,12 @@ const UserLogin = () => {
             onAction={(key) => {
               if (key === 'logout') {
                 handleLogout()
+              }
+              if (key === 'subscriptions') {
+                router.push('/subscription')
+              }
+              if (key === 'my_courses') {
+                router.push('/my-courses')
               }
             }}
             aria-label="Profile Actions" 

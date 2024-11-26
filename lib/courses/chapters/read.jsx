@@ -1,17 +1,17 @@
 'use client'
 
-import { collection, doc, onSnapshot, query, where } from 'firebase/firestore'
+import { collection, doc, onSnapshot, orderBy, query, where } from 'firebase/firestore'
 import { SSG_GET_INITIAL_PROPS_CONFLICT } from 'next/dist/lib/constants'
 import useSWRSubscription from 'swr/subscription'
-import { db } from '../firebase'
+import { db } from '../../firebase'
 
-export const useCourses = ({ uid }) => {
+export const useChapters = ({ courseId }) => {
   const { data, error } = useSWRSubscription(
-    ['courses', uid],
-    ([path, uid], { next }) => {
+    ['chapters', courseId],
+    ([path, courseId], { next }) => {
       const collectionRef = query(
-        collection(db, `courses`),
-        where('instructorId', '==', uid)
+        collection(db, `courses/${courseId}/chapters`),
+        orderBy('timestampCreate', 'asc')
       )
       const unsub = onSnapshot(
         collectionRef, (snapshot) => {
@@ -27,14 +27,15 @@ export const useCourses = ({ uid }) => {
   return { data, error, isLoading: data === undefined }
 }
 
-export const useCourse = ({ id }) => {
+export const useChapter = ({ courseId, chapterId }) => {
   const { data, error } = useSWRSubscription(
-    ['courses', id],
-    ([path, id], { next }) => {
-      const docRef = doc(db, `courses/${id}`)
+    ['chapters', courseId, chapterId],
+    ([path, courseId], { next }) => {
+      const docRef = (
+        doc(db, `courses/${courseId}/chapters/${chapterId}`)
+      )
       const unsub = onSnapshot(
-        docRef, 
-        (snapshot) => {
+        docRef, (snapshot) => {
           next(
             null,
             !snapshot.exists() ? null : snapshot.data()
