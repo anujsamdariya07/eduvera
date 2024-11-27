@@ -20,7 +20,7 @@ const UserLogin = () => {
   if (user) {
     return (
       <div>
-        {/* <Dropdown placement="bottom-end">
+        <Dropdown placement="bottom-end">
           <DropdownTrigger>
             <Avatar
               isBordered
@@ -56,8 +56,8 @@ const UserLogin = () => {
               Log Out
             </DropdownItem>
           </DropdownMenu>
-        </Dropdown> */}
-          <Dropdown placement="bottom-start">
+        </Dropdown>
+          {/* <Dropdown placement="bottom-start">
           <DropdownTrigger>
             <User
               as="button"
@@ -91,7 +91,7 @@ const UserLogin = () => {
               Log Out
             </DropdownItem>
           </DropdownMenu>
-        </Dropdown>
+        </Dropdown> */}
       </div>
     )
   }
