@@ -15,7 +15,7 @@ const CourseButton = ({courseId, instructorId}) => {
   if (data) {
     // Already purchased
     return (
-      <Link href={`/subscriptions/${courseId}`}>
+      <Link href={`/subscription/${courseId}`}>
         <button className='flex gap-2 items-center bg-black mt-2 text-white w-full py-3 rounded-xl font-semibold text-sm justify-center'>
           <Play size={16} />
           Learn

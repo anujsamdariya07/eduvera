@@ -17,11 +17,28 @@ import {
   markChapterAsCompleted,
   markChapterAsIncompleted,
 } from '../../../../../lib/subscriptions/write';
+import DownloadCertificate from './DownloadCertificate'
+import { useCourse } from 'lib/courses/read';
 
 const Chapters = () => {
   const { courseId } = useParams();
 
   const { data: chapters } = useChapters({ courseId: courseId });
+
+  const {data: course} = useCourse({id: courseId})
+
+  const { user } = useAuth();
+
+  const { data: subscription } = useSubscription({
+    id: courseId,
+    uid: user?.uid,
+  });
+
+  const percentage =
+    subscription?.totalChapter === 0
+      ? 0
+      : (subscription?.completedChapters?.length / subscription?.totalChapter) *
+        100;
 
   return (
     <section className='md:w-[450px] flex flex-col gap-3 w-full p-5 rounded-xl border bg-white'>
@@ -37,6 +54,7 @@ const Chapters = () => {
           );
         })}
       </div>
+      {percentage >= 75 ? <DownloadCertificate studentName={user?.displayName} courseName={course?.title} /> : null}
     </section>
   );
 };
