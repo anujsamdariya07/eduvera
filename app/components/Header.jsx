@@ -10,7 +10,7 @@ const Header = () => {
       <div className='border-b px-8 py-3 flex justify-between'>
         <Link href={'/'}>
           <img
-            src="/logo.png"
+            src="/eduvera-logo.png"
             alt=""
             className='h-10'
           />

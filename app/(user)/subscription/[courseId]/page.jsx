@@ -26,7 +26,7 @@ const SubscribedCourse = ({ params }) => {
       <header className='bg-white py-4 px-3 flex justify-between items-center border-b w-full sticky top-0 z-50'>
         <div className='flex items-center gap-3'>
           <Link href={'/'}>
-            <img className='h-10' src="/logo.png" alt="" />
+            <img className='h-10' src="/eduvera-logo.png" alt="" />
           </Link>
           <Link href={`/subscription/${courseId}`}>
             <h1 className='font-semibold text-2xl line-clamp-1 hidden md:block'>
